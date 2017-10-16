@@ -1,18 +1,4 @@
-## Advanced Lane Finding
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
-
-
-In this project, your goal is to write a software pipeline to identify the lane boundaries in a video, but the main output or product we want you to create is a detailed writeup of the project.  Check out the [writeup template](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup.  
-
-Creating a great writeup:
----
-A great writeup should include the rubric points as well as your description of how you addressed each point.  You should include a detailed description of the code used in each step (with line-number references and code snippets where necessary), and links to other supporting documents or external references.  You should include images in your writeup to demonstrate how your code works with examples.  
-
-All that said, please be concise!  We're not looking for you to write a book here, just a brief description of how you passed each rubric point, and references to the relevant code :). 
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup.
-
-The Project
+Advanced Lane finding using Computer Vision Techniques
 ---
 
 The goals / steps of this project are the following:
@@ -26,14 +12,45 @@ The goals / steps of this project are the following:
 * Warp the detected lane boundaries back onto the original image.
 * Output visual display of the lane boundaries and numerical estimation of lane curvature and vehicle position.
 
-The images for camera calibration are stored in the folder called `camera_cal`.  The images in `test_images` are for testing your pipeline on single frames.  If you want to extract more test images from the videos, you can simply use an image writing method like `cv2.imwrite()`, i.e., you can read the video in frame by frame as usual, and for frames you want to save for later you can write to an image file.  
+Camera Calibration
+---
+The images captured by camera are distorted. Camera matrix and distortion co-efficients specific to camera needs to be calculated in order to undistort the images. Given images of the chess board and openCV fuction called 'FindChessoboardCorners' is used to calculate the camera matrix and distortion co-efficient. Below is the given sample chess board image and the corresponding undistorted image.  
 
-To help the reviewer examine your work, please save examples of the output from each stage of your pipeline in the folder called `ouput_images`, and include a description in your writeup for the project of what each image shows.    The video called `project_video.mp4` is the video your pipeline should work well on.  
+<img src="images/undistorted_chess.png" width="480" alt="Combined Image" />
 
-The `challenge_video.mp4` video is an extra (and optional) challenge for you if you want to test your pipeline under somewhat trickier conditions.  The `harder_challenge.mp4` video is another optional challenge and is brutal!
+The camera matrix and distortion co-efficients are applied to road images. Below is the example input image and corresponding undistorted image.
 
-If you're feeling ambitious (again, totally optional though), don't stop there!  We encourage you to go out and take video of your own, calibrate your camera and show us how you would implement this project from scratch!
+<img src="images/undistorted_road.png" width="480" alt="Combined Image" />
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+Perspective Transform
+---
+The undistorted image is used to genertae bird's eye view of the image. Suitable source points and destination points are used to generate perspective matrix using openCV function called 'getPerspectiveTransform'. Below is the sample output of bird's eye view image.
+
+<img src="images/perspective_trasnform.png" width="480" alt="Combined Image" />
+
+Binary Image
+---
+The output of the bird's eye view image is used to generate binary image. I experimented different combinations of color threshold and gradient threshold to extract the lines in the binary image. Final output for one of the input image is shown below
+
+<img src="images/perspective_binary.png" width="480" alt="Combined Image" />
+
+Polyfitting the 2D curve on the binary image
+---
+Histogram for the lower part of the image is calculated to find left and right peak in the image. Those points are used as starting co-ordinates for the lane line. Mean of non zero points around the peaks are calculated and are then used to calculate the next center points in the window. Process is repeated till we reach top of the image. 
+Using the non zero points 2D curve is drawn. Sample output image is shown below.
+
+<img src="images/poly_fit.png" width="480" alt="Combined Image" />
+
+Curvature and position car from lanes
+---
+Curvature for both the lanes is calculated and shown on each image in the video. The distance of cars from the end lanes is calculated and is also shown on the image. Sanity check function is implemented to verify if lane curvature for left and right image doesnt vary much. The moving average for last N frames is used to store the left and right non zero points. Below is the output image showing lane marking.
+
+<img src="images/image_with_lanes_marking.png" width="480" alt="Combined Image" />
+
+Same procedure is used on the input video to generate the output video. Below is the output video with the lane marking.
+
+<a href="https://www.youtube.com/watch?v=yoDfYmGO7es
+" target="_blank"><img src="http://img.youtube.com/vi/yoDfYmGO7es/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
 
