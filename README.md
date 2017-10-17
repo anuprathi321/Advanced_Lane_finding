@@ -49,8 +49,8 @@ Curvature for both the lanes is calculated and shown on each image in the video.
 
 Same procedure is used on the input video to generate the output video. Below is the output video with the lane marking.
 
-<a href="https://www.youtube.com/watch?v=yoDfYmGO7es
-" target="_blank"><img src="http://img.youtube.com/vi/yoDfYmGO7es/0.jpg" 
+<a href="https://www.youtube.com/watch?v=qo2IvnOaOl4
+" target="_blank"><img src="http://img.youtube.com/vi/qo2IvnOaOl4/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 
